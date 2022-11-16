@@ -1,15 +1,25 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../AuthProvider/AuthProvider';
 
 const NavMenu = () => {
-
+    const { user, logOut } = useContext(AuthContext);
+    const singOut = () => {
+        logOut()
+            .then(() => {
+                // Sign-out successful.
+            }).catch((error) => {
+                // An error happened.
+            });
+    }
     const menu = <>
         <li><Link to='/'>Home</Link></li>
         <li><Link to='/about'>About</Link></li>
         <li><Link to='/appointment'>Appointment</Link></li>
         <li><Link to='/reviews'>Reviews</Link></li>
         <li><Link to='/contact'>Contact Us</Link></li>
-        <li><Link to='/login'>Loging</Link></li>
+        <li>{user?.uid ? <Link onClick={singOut}>Log Out</Link> : <Link to='/login'>Login</Link>}</li>
+        {user?.uid && <li><Link>{user.displayName}</Link></li>}
     </>
 
     return (
