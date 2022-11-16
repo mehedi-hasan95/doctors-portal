@@ -1,16 +1,19 @@
 import { GoogleAuthProvider } from 'firebase/auth';
 import React, { useContext, useState } from 'react';
 import { useForm } from "react-hook-form";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../../AuthProvider/AuthProvider';
 
 const Register = () => {
     const {createUser, updateUser, googleLogin} = useContext(AuthContext);
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
 
     const { register, handleSubmit, formState: { errors } } = useForm();
+
+
     const onSubmit = data => {
         setError('')
         createUser(data.email, data.password)
@@ -22,8 +25,7 @@ const Register = () => {
             }
             updateUser(userInfo)
             .then(() => {
-                // Profile updated!
-                // ...
+                navigate('/');
               }).catch((error) => {
                 // An error occurred
                 // ...

@@ -6,11 +6,12 @@ import AvilableSlot from './AvilableSlot/AvilableSlot';
 
 const AvilableAppointment = ({selectDate}) => {
     const [treatment, setTreatment] = useState(null);
+    const date = format(selectDate, 'PP');
 
-    const {data: avilableSlot, isLoading} = useQuery({
-        queryKey: ['apointmentOptions'],
+    const {data: avilableSlot, isLoading, refetch} = useQuery({
+        queryKey: ['apointmentOptions', date],
         queryFn: () => 
-        fetch ('http://localhost:5000/apointmentOptions')
+        fetch (`http://localhost:5000/apointmentOptions?date=${date}`)
         .then (res => res.json())
     })
     if (isLoading) return 'Loading...'
@@ -23,7 +24,7 @@ const AvilableAppointment = ({selectDate}) => {
                 }
             </div>
             {
-                treatment && <BookingModal treatment={treatment} selectDate={selectDate} setTreatment={setTreatment}></BookingModal>
+                treatment && <BookingModal treatment={treatment} refetch={refetch} selectDate={selectDate} setTreatment={setTreatment}></BookingModal>
             }
         </div>
     );
