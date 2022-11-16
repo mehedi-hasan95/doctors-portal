@@ -1,17 +1,19 @@
+import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import BookingModal from '../../BookingModal/BookingModal';
 import AvilableSlot from './AvilableSlot/AvilableSlot';
 
 const AvilableAppointment = ({selectDate}) => {
-    const [avilableSlot, setAvilableSlot] = useState([]);
     const [treatment, setTreatment] = useState(null);
 
-    useEffect( () => {
-        fetch ('avilableData.json')
+    const {data: avilableSlot, isLoading} = useQuery({
+        queryKey: ['apointmentOptions'],
+        queryFn: () => 
+        fetch ('http://localhost:5000/apointmentOptions')
         .then (res => res.json())
-        .then (data => setAvilableSlot(data));
-    },[])
+    })
+    if (isLoading) return 'Loading...'
     return (
         <div className='py-24'>
             <p className=' text-secondery-50 text-xl text-center'>Available Appointments on {format(selectDate, 'PP')}.</p>

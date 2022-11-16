@@ -3,6 +3,11 @@ import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWith
 import app from '../Firebase/Firebase.inin';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {
+    QueryClient,
+    QueryClientProvider,
+} from '@tanstack/react-query';
+const queryClient = new QueryClient()
 
 
 export const AuthContext = createContext();
@@ -56,10 +61,13 @@ const AuthProvider = ({ children }) => {
         user, createUser, logIn, updateUser, logOut, googleLogin, loading
     }
     return (
-        <AuthContext.Provider value={authInfo}>
-            {children}
-            <ToastContainer position="top-right" />
-        </AuthContext.Provider>
+        <QueryClientProvider client={queryClient}>
+            <AuthContext.Provider value={authInfo}>
+                {children}
+                <ToastContainer position="top-right" />
+            </AuthContext.Provider>
+        </QueryClientProvider>
+
     );
 };
 
