@@ -6,6 +6,7 @@ import MyAppointments from "../Pages/Dashboard/MyAppointments/MyAppointments";
 import Home from "../Pages/Home/Home";
 import Login from "../Pages/Login/Login";
 import Register from "../Pages/Login/Register";
+import Adminrouter from "./AdminRouter";
 import PrivetRouter from "./PrivetRouter";
 
 const { createBrowserRouter } = require("react-router-dom");
@@ -23,7 +24,7 @@ const router = createBrowserRouter ([
 {path: 'dashboard', element: <PrivetRouter><DashboardLayout></DashboardLayout></PrivetRouter>,
         children: [
             {path: '/dashboard', element: <MyAppointments></MyAppointments>},
-            {path: '/dashboard/users', element: <AllUsers></AllUsers>},
+            {path: '/dashboard/users', element: <Adminrouter><AllUsers></AllUsers></Adminrouter>},
         ]
     },
 ]);
