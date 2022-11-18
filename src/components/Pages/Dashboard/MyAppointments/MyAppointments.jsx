@@ -1,6 +1,23 @@
+import { useQuery } from '@tanstack/react-query';
 import React, { useContext } from 'react';
+import { AuthContext } from '../../../AuthProvider/AuthProvider';
 
 const MyAppointments = () => {
+    const {user} = useContext(AuthContext);
+    const url = `http://localhost:5000/booking?email=${user?.email}`;
+
+    const {data: booking = []} = useQuery({
+        queryKey: ['booking', user?.email],
+        queryFn: async () => {
+            const res = await fetch(url, {
+                headers: {
+                    authorization: `bearar ${localStorage.getItem('appointmentToken')}`
+                }
+            });
+            const data = await res.json();
+            return data
+        }
+    })
 
     return (
         <div>
@@ -16,12 +33,14 @@ const MyAppointments = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th>1</th>
-                            <td>Cy Ganderton</td>
-                            <td>Quality Control Specialist</td>
-                            <td>Blue</td>
-                        </tr>
+                        {
+                            booking.map((book, idx) => <tr key={idx}>
+                                <th>{idx+1}</th>
+                                <td>{book.patient}</td>
+                                <td>{book.appointmentDate}</td>
+                                <td>{book.time}</td>
+                            </tr>)
+                        }
                     </tbody>
                 </table>
             </div>

@@ -1,6 +1,7 @@
 import DashboardLayout from "../layouts/DashboardLayout";
 import Main from "../layouts/Main";
 import Appointment from "../Pages/Appointment/Appointment/Appointment";
+import AllUsers from "../Pages/Dashboard/AllUsers/AllUsers";
 import MyAppointments from "../Pages/Dashboard/MyAppointments/MyAppointments";
 import Home from "../Pages/Home/Home";
 import Login from "../Pages/Login/Login";
@@ -21,7 +22,8 @@ const router = createBrowserRouter ([
 },
 {path: 'dashboard', element: <PrivetRouter><DashboardLayout></DashboardLayout></PrivetRouter>,
         children: [
-            {path: '/dashboard', element: <MyAppointments></MyAppointments>}
+            {path: '/dashboard', element: <MyAppointments></MyAppointments>},
+            {path: '/dashboard/users', element: <AllUsers></AllUsers>},
         ]
     },
 ]);
