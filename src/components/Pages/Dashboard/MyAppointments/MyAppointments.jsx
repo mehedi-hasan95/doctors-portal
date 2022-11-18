@@ -3,19 +3,23 @@ import React, { useContext } from 'react';
 import { AuthContext } from '../../../AuthProvider/AuthProvider';
 
 const MyAppointments = () => {
-    const {user} = useContext(AuthContext);
+    const {user, logOut} = useContext(AuthContext);
     const url = `http://localhost:5000/booking?email=${user?.email}`;
 
     const {data: booking = []} = useQuery({
         queryKey: ['booking', user?.email],
-        queryFn: async () => {
-            const res = await fetch(url, {
+        queryFn: () => {
+            fetch(url, {
                 headers: {
                     authorization: `bearar ${localStorage.getItem('appointmentToken')}`
                 }
-            });
-            const data = await res.json();
-            return data
+            })
+            .then(res => {
+                if (res.status === 401 || res.status === 403) {
+                    return logOut();
+                }
+                return res.json();
+            } )
         }
     })
 
