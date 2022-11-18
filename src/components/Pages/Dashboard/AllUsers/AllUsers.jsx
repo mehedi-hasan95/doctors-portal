@@ -16,6 +16,9 @@ const AllUsers = () => {
     const updateUser = id => {
         fetch(`http://localhost:5000/users/admin/${id}`, {
             method: 'PUT',
+            headers: {
+                authorization: `bearar ${localStorage.getItem('appointmentToken')}`
+            }
         })
             .then((response) => response.json())
             .then((data) => {
