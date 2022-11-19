@@ -1,8 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+import ConformationModal from '../../Common/ConformationModal';
 
 const ManageDoctors = () => {
-    const { data: manageDoctors = [] } = useQuery({
+
+    // Modal oper or hide 
+    const [deleteDoctor, setDeleteDoctor] = useState(null);
+    const closeModal = () => {
+        setDeleteDoctor(null);
+    }
+
+    const { data: manageDoctors = [], refetch } = useQuery({
         queryKey: ['doctors'],
         queryFn: async () => {
             try {
@@ -19,6 +28,23 @@ const ManageDoctors = () => {
             }
         }
     })
+
+    // Delete a user
+    const confirmDelete = doctor => {
+        fetch(`http://localhost:5000/doctors/${doctor._id}`, {
+            method: 'DELETE', // or 'PUT'
+            headers: {
+                authorization: `bearar ${localStorage.getItem('appointmentToken')}`
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if(data.acknowledged) {
+                    toast.success(`You have sucessfully delete ${doctor.name}`, {autoClose: 1000});
+                    refetch();
+                }
+            })
+    }
     return (
         <div>
             <h2 className='text-3xl'>Manage Doctors</h2>
@@ -46,10 +72,22 @@ const ManageDoctors = () => {
                                 </th>
                                 <td>{doctor.name}</td>
                                 <td>{doctor.speciality}</td>
-                                <td><button className='btn btn-sm'>Delete</button></td>
+                                <td>
+                                    <label onClick={() => setDeleteDoctor(doctor)} htmlFor="conform-modal" className="btn btn-sm">Delete</label>
+                                </td>
                             </tr>)
                         }
                     </tbody>
+                    {
+                        deleteDoctor && <ConformationModal
+                            title={'Are you sure to delete the Doctor?'}
+                            message={`You are delete ${deleteDoctor.name}. Please confirm that`}
+                            closeModal={closeModal}
+                            doctorData={deleteDoctor}
+                            successModal="Delete"
+                            confirmDelete={confirmDelete}
+                        ></ConformationModal>
+                    }
                 </table>
             </div>
         </div>
