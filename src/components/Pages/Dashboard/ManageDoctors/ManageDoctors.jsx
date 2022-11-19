@@ -37,6 +37,7 @@ const ManageDoctors = () => {
                 authorization: `bearar ${localStorage.getItem('appointmentToken')}`
             }
         })
+        
             .then(res => res.json())
             .then(data => {
                 if(data.acknowledged) {
