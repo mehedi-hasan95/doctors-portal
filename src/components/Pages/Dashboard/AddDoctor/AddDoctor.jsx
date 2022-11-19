@@ -1,9 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { data } from 'autoprefixer';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const AddDoctor = () => {
+    const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     const uploadImage = process.env.REACT_APP_image_host;
@@ -13,15 +15,36 @@ const AddDoctor = () => {
         const image = data.image[0];
         const formData = new FormData();
         formData.append('image', image);
-        const url = `https://api.imgbb.com/1/upload?expiration=600&key=${uploadImage}`;
+        const url = `https://api.imgbb.com/1/upload?key=${uploadImage}`;
         fetch(url, {
             method: 'POST',
             body: formData
         })
             .then(res => res.json())
             .then(imgData => {
-                if(imgData.success) {
-                    console.log(imgData.data.url);
+                if (imgData.success) {
+                    const doctors = {
+                        name: data.name,
+                        email: data.email,
+                        speciality: data.speciality,
+                        image: imgData.data.url
+
+                    }
+                    fetch('http://localhost:5000/doctors', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            authorization: `bearer ${localStorage.getItem('appointmentToken')}`
+                        },
+                        body: JSON.stringify(doctors),
+                    })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            if(data.acknowledged) {
+                                toast.success('Doctor create sucessfully', {autoClose: 1000});
+                                navigate('/dashboard/mangagedoctors');
+                            }
+                        })
                 }
             })
     }
@@ -73,7 +96,7 @@ const AddDoctor = () => {
                             <input {...register("image", { required: "Upload your Photo", })} type="file" className="px-8 w-96 py-12 border-2 border-dashed rounded-md dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800" />
                         </div>
                     </fieldset>
-                    <input type="submit" className='py-3 bg-primery-50 block w-full mt-5 rounded-lg text-white font-semibold' value="Add Doctor" />
+                    <input type="submit" className='py-3 bg-primery-50 cursor-pointer block w-full mt-5 rounded-lg text-white font-semibold' value="Add Doctor" />
                 </form>
             </div>
         </div>
