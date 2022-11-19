@@ -1,10 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { AuthContext } from '../../../AuthProvider/AuthProvider';
 
 const AddDoctor = () => {
+    const {logOut} = useContext(AuthContext)
     const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -55,6 +57,9 @@ const AddDoctor = () => {
         queryFn: async () => {
             const res = await fetch(`http://localhost:5000/appointmentname`);
             const data = await res.json()
+            if( data.status === 403 || data.status === 401 ) {
+                return logOut();
+            }
             return data;
         }
     })

@@ -1,9 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { toast } from 'react-toastify';
+import { AuthContext } from '../../../AuthProvider/AuthProvider';
 import ConformationModal from '../../Common/ConformationModal';
 
 const ManageDoctors = () => {
+    const {logOut} = useContext(AuthContext);
 
     // Modal oper or hide 
     const [deleteDoctor, setDeleteDoctor] = useState(null);
@@ -21,6 +23,9 @@ const ManageDoctors = () => {
                     },
                 })
                 const data = await res.json()
+                if( data.status === 403 || data.status === 401 ) {
+                    return logOut();
+                }
                 return data;
             }
             catch (error) {

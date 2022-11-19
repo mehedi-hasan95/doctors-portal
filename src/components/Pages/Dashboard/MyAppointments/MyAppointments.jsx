@@ -15,9 +15,10 @@ const MyAppointments = () => {
                 }
             });
             const data = await res.json();
-            // if(data.status === 401 || data.status === 401) {
-            //     return logOut();
-            // }
+            if( data.status === 403 || data.status === 401 ) {
+                return logOut();
+            }
+            console.log(data);
             return data
         }
     })
