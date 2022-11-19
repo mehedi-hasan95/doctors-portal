@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { AuthContext } from '../../../AuthProvider/AuthProvider';
 
 const MyAppointments = () => {
-    const {user} = useContext(AuthContext);
+    const {user, logOut} = useContext(AuthContext);
     const url = `http://localhost:5000/booking?email=${user?.email}`;
 
     const {data: booking = []} = useQuery({
@@ -15,6 +15,9 @@ const MyAppointments = () => {
                 }
             });
             const data = await res.json();
+            // if(data.status === 401 || data.status === 401) {
+            //     return logOut();
+            // }
             return data
         }
     })
