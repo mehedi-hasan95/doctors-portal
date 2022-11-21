@@ -15,7 +15,7 @@ const MyAppointments = () => {
                 }
             });
             const data = await res.json();
-            if( data.status === 403 || data.status === 401 ) {
+            if( data.message ) {
                 return logOut();
             }
             console.log(data);
