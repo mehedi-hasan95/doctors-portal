@@ -49,7 +49,7 @@ const MyAppointments = () => {
                                         book.price && !book.paid && <Link to={`/dashboard/payment/${book._id}`}><button className='btn btn-primary btn-sm'>Pay ${book.price}</button></Link>
                                     }
                                     {
-                                        book.price && book.paid && <button className='btn btn-primary btn-sm'>Paid</button>
+                                        book.price && book.paid && <button className=' bg-secondery-50 px-3 py-1 rounded-md font-semibold' disabled>Paid</button>
                                     }
                                 </td>
                             </tr>)

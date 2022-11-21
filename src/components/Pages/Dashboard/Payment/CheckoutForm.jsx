@@ -9,7 +9,7 @@ const CheckoutForm = ({ payments }) => {
     const [paymentLoadding, setPaymentLoadding] = useState(false);
     const stripe = useStripe();
     const elements = useElements();
-    const { price, patient, email } = payments;
+    const { price, patient, email, _id } = payments;
 
     useEffect(() => {
         // Create PaymentIntent as soon as the page loads
@@ -51,25 +51,44 @@ const CheckoutForm = ({ payments }) => {
 
         setPaymentSuccess('');
         setPaymentLoadding(true)
-        const {paymentIntent, paymentError} = await stripe.confirmCardPayment(
+        const { paymentIntent, paymentError } = await stripe.confirmCardPayment(
             clientSecret,
             {
-              payment_method: {
-                card: card,
-                billing_details: {
-                  name: patient,
-                  email: email,
+                payment_method: {
+                    card: card,
+                    billing_details: {
+                        name: patient,
+                        email: email,
+                    },
                 },
-              },
             },
         );
-        if(paymentError) {
+        if (paymentError) {
             setCardError(paymentError.message);
             return
         }
-        if(paymentIntent.status === "succeeded" ) {
-            setPaymentSuccess('You have successfully perchess');
-            setPaymentId(`Your Payment id is ${paymentIntent.id}`)
+        if (paymentIntent.status === "succeeded") {
+
+            const payment = {
+                price, email,
+                paymentId: paymentIntent.id,
+                serviceId: _id,
+            }
+            fetch('http://localhost:5000/payments', {
+                method: 'POST', // or 'PUT'
+                headers: {
+                    'Content-Type': 'application/json',
+                    authorization: `bearar ${localStorage.getItem('appointmentToken')}`
+                },
+                body: JSON.stringify(payment),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.insertedId) {
+                        setPaymentSuccess('You have successfully perchess');
+                        setPaymentId(`Your Payment id is ${paymentIntent.id}`)
+                    }
+                })
         }
         setPaymentLoadding(false)
     };
