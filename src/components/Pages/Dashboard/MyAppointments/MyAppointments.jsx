@@ -18,10 +18,12 @@ const MyAppointments = () => {
             if( data.message ) {
                 return logOut();
             }
-            console.log(data);
             return data
         }
     })
+
+    // title, message, closeModal, confirmDelete, doctorData, successModal
+    
 
     return (
         <div>
@@ -34,6 +36,7 @@ const MyAppointments = () => {
                             <th>Name</th>
                             <th>Date</th>
                             <th>Time</th>
+                            <th>Method</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -43,6 +46,14 @@ const MyAppointments = () => {
                                 <td>{book.patient}</td>
                                 <td>{book.appointmentDate}</td>
                                 <td>{book.time}</td>
+                                <td>
+                                    {
+                                        book.price && !book.paid && <button className='btn btn-primary btn-sm'>Pay ${book.price}</button>
+                                    }
+                                    {
+                                        book.price && book.paid && <button>Paid</button>
+                                    }
+                                </td>
                             </tr>)
                         }
                     </tbody>

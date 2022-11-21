@@ -5,7 +5,7 @@ import { AuthContext } from '../../AuthProvider/AuthProvider';
 
 const BookingModal = ({ treatment, setTreatment, selectDate, refetch }) => {
     const {user} = useContext(AuthContext);
-    const { name, slots } = treatment;
+    const { name, slots, price } = treatment;
     const selectedDate = format(selectDate, 'PP');
 
 
@@ -24,6 +24,7 @@ const BookingModal = ({ treatment, setTreatment, selectDate, refetch }) => {
             phone, email,
             time: slot,
             appointmentDate: selectedDate,
+            price,
         }
 
 
@@ -73,6 +74,7 @@ const BookingModal = ({ treatment, setTreatment, selectDate, refetch }) => {
                         <input type="text" name='name' defaultValue={user?.displayName} disabled placeholder="Full Name" className="input input-bordered w-full" />
                         <input type="tel" name="phone" placeholder='Your Phone' className="input input-bordered w-full" required />
                         <input type="email" name="email" defaultValue={user?.email} disabled placeholder='Your Email' className="input input-bordered w-full" required />
+                        <p><span className='font-bold'>Price</span> ${price}</p>
                         <input type="submit" className='bg-slate-600 py-3 cursor-pointer rounded-lg text-white font-semibold' value="Submit" />
 
                     </form>
