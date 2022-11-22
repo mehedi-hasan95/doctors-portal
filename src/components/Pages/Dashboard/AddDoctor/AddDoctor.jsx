@@ -32,7 +32,7 @@ const AddDoctor = () => {
                         image: imgData.data.url
 
                     }
-                    fetch('http://localhost:5000/doctors', {
+                    fetch('https://doctors-portal-server-rose-six.vercel.app/doctors', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ const AddDoctor = () => {
     const { data: appointmentnames = [] } = useQuery({
         queryKey: ['appointmentname'],
         queryFn: async () => {
-            const res = await fetch(`http://localhost:5000/appointmentname`);
+            const res = await fetch(`https://doctors-portal-server-rose-six.vercel.app/appointmentname`);
             const data = await res.json()
             if( data.status === 403 || data.status === 401 ) {
                 return logOut();

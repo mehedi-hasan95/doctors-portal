@@ -11,7 +11,7 @@ const AvilableAppointment = ({selectDate}) => {
     const {data: avilableSlot, isLoading, refetch} = useQuery({
         queryKey: ['apointmentOptions', date],
         queryFn: () => 
-        fetch (`http://localhost:5000/apointmentOptions?date=${date}`)
+        fetch (`https://doctors-portal-server-rose-six.vercel.app/apointmentOptions?date=${date}`)
         .then (res => res.json())
     })
     if (isLoading) return 'Loading...'

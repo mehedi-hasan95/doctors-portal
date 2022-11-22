@@ -48,7 +48,7 @@ const Register = () => {
     // Send datA to the DB
     const sendUser = (name, email) => {
         const user = {name, email};
-        fetch('http://localhost:5000/users', {
+        fetch('https://doctors-portal-server-rose-six.vercel.app/users', {
         method: 'POST', // or 'PUT'
         headers: {
             'Content-Type': 'application/json',

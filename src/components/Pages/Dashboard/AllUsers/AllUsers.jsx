@@ -9,7 +9,7 @@ const AllUsers = () => {
     const { data: users = [], refetch } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
-            const res = await fetch(`http://localhost:5000/users`);
+            const res = await fetch(`https://doctors-portal-server-rose-six.vercel.app/users`);
             const data = await res.json();
             if( data.status === 403 || data.status === 401 ) {
                 return logOut;
@@ -20,7 +20,7 @@ const AllUsers = () => {
 
     // Update user role 
     const updateUser = id => {
-        fetch(`http://localhost:5000/users/admin/${id}`, {
+        fetch(`https://doctors-portal-server-rose-six.vercel.app/users/admin/${id}`, {
             method: 'PUT',
             headers: {
                 authorization: `bearar ${localStorage.getItem('appointmentToken')}`
@@ -45,7 +45,7 @@ const AllUsers = () => {
         setDeleteUser(null);
     }
     const confirmDelete = doctor => {
-        fetch(`http://localhost:5000/users/${doctor._id}`, {
+        fetch(`https://doctors-portal-server-rose-six.vercel.app/users/${doctor._id}`, {
             method: 'DELETE', // or 'PUT'
             headers: {
                 authorization: `bearar ${localStorage.getItem('appointmentToken')}`
